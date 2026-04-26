@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb;
     private Vector2 moveInput;
-
+    public bool isKnockback = false;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -17,9 +17,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (isKnockback) return;
         Move();
         Aim();
         Shoot();
+        
     }
 
     void Move()
@@ -33,7 +35,7 @@ public class PlayerController : MonoBehaviour
         if (Keyboard.current.sKey.isPressed) y = -1;
         if (Keyboard.current.wKey.isPressed) y = 1;
 
-        moveInput = new Vector2(x, y);
+        moveInput = new Vector2(x, y).normalized;
         rb.linearVelocity = moveInput * speed;
     }
 
