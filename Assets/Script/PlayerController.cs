@@ -1,34 +1,48 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     public float speed = 5f;
-    public GameObject bulletPrefab;
+
+    public GameObject normalBullet;
+    public GameObject homingBullet;
+
+    private GameObject currentBullet;
+
     public Transform firePoint;
-    
+
     private Rigidbody2D rb;
     private Vector2 moveInput;
     public bool isKnockback = false;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
 
+        if (normalBullet == null)
+        {
+            Debug.LogError("? normalBullet ยังไม่ได้ใส่!");
+            return;
+        }
+
+        currentBullet = normalBullet;
+
+        Debug.Log("Start Bullet: " + currentBullet.name);
     }
 
     void Update()
     {
         if (isKnockback) return;
+
         Move();
         Aim();
         Shoot();
-        
     }
 
     void Move()
     {
-        // อ่าน WASD
         float x = 0;
         float y = 0;
 
@@ -54,7 +68,41 @@ public class PlayerController : MonoBehaviour
     {
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
-            Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+            if (currentBullet == null)
+            {
+                Debug.LogError("? currentBullet เป็น null!");
+                return;
+            }
+
+            Debug.Log("ยิง: " + currentBullet.name);
+
+            Instantiate(currentBullet, firePoint.position, firePoint.rotation);
         }
+    }
+
+    public void SetHomingBullet(float duration)
+    {
+        if (homingBullet == null)
+        {
+            Debug.LogError("? homingBullet ยังไม่ได้ใส่!");
+            return;
+        }
+
+        StopAllCoroutines();
+
+        currentBullet = homingBullet;
+
+        Debug.Log("?? เปลี่ยนเป็น Homing");
+
+        StartCoroutine(HomingDuration(duration));
+    }
+
+    IEnumerator HomingDuration(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+
+        currentBullet = normalBullet;
+
+        Debug.Log("? กลับเป็นปกติ");
     }
 }
