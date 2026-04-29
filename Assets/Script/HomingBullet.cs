@@ -17,8 +17,12 @@ public class HomingBullet : MonoBehaviour
 
     void Update()
     {
+        // ?? ถ้าไม่มีเป้า ? หาใหม่
         if (target == null)
         {
+            FindTarget();
+
+            // ถ้ายังไม่มี ? ยิงตรง
             transform.Translate(Vector2.up * speed * Time.deltaTime);
             return;
         }
@@ -56,11 +60,22 @@ public class HomingBullet : MonoBehaviour
         }
     }
 
+    // ?? รองรับทั้ง Trigger และ Collision
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.CompareTag("Enemy"))
+        HitEnemy(col.gameObject);
+    }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        HitEnemy(col.gameObject);
+    }
+
+    void HitEnemy(GameObject obj)
+    {
+        if (obj.CompareTag("Enemy"))
         {
-            Enemy enemy = col.GetComponent<Enemy>();
+            Enemy enemy = obj.GetComponent<Enemy>();
 
             if (enemy != null)
             {
