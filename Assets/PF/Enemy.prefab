@@ -411,6 +411,7 @@ MonoBehaviour:
   maxShield: 2
   shield: 2
   shieldVisual: {fileID: 6452659707937343722}
+  spawner: {fileID: 0}
 --- !u!50 &1160850227863625071
 Rigidbody2D:
   serializedVersion: 5

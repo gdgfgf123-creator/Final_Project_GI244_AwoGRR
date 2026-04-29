@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+
 public class PlayerHealth : MonoBehaviour
 {
     public int maxHP = 10;
@@ -14,7 +15,7 @@ public class PlayerHealth : MonoBehaviour
 
     public float knockbackForce = 5f;
 
-    public GameObject shieldVisual; 
+    public GameObject shieldVisual;
 
     private Rigidbody2D rb;
     private bool canTakeDamage = true;
@@ -26,15 +27,24 @@ public class PlayerHealth : MonoBehaviour
         hp = maxHP;
         shield = maxShield;
 
-        shielSlider.maxValue = maxShield;
-        shielSlider.value = shield;
-        hpSlider.maxValue = maxHP;   
-        hpSlider.value = hp;         
+        // ?? ตั้งค่า UI
+        if (hpSlider != null)
+        {
+            hpSlider.maxValue = maxHP;
+            hpSlider.value = hp;
+        }
+
+        if (shielSlider != null)
+        {
+            shielSlider.maxValue = maxShield;
+            shielSlider.value = shield;
+        }
 
         UpdateShieldVisual();
 
         InvokeRepeating(nameof(AutoHeal), 5f, 5f);
     }
+
     void AutoHeal()
     {
         if (hp < maxHP)
@@ -44,13 +54,28 @@ public class PlayerHealth : MonoBehaviour
             Debug.Log("Heal +1 | HP: " + hp);
         }
     }
+
+    // ?? ฟังก์ชันเพิ่มโล่ (ตัวที่ error)
+    public void AddShield(int amount)
+    {
+        shield += amount;
+
+        if (shield > maxShield)
+            shield = maxShield;
+
+        UpdateShieldVisual();
+        UpdateHPUI();
+
+        Debug.Log("Shield: " + shield);
+    }
+
     public void TakeDamage(int dmg, Vector2 enemyPos)
     {
         if (!canTakeDamage) return;
 
         canTakeDamage = false;
 
-        // ??? Shield ก่อน
+        // ??? โล่รับก่อน
         if (shield > 0)
         {
             shield -= dmg;
@@ -65,13 +90,15 @@ public class PlayerHealth : MonoBehaviour
         {
             hp -= dmg;
         }
-        //Knockback
+
+        // ?? Knockback
         Vector2 dir = (transform.position - (Vector3)enemyPos).normalized;
         rb.linearVelocity = Vector2.zero;
         rb.AddForce(dir * knockbackForce, ForceMode2D.Impulse);
 
-        UpdateShieldVisual(); // อัปเดตโล่
+        UpdateShieldVisual();
         UpdateHPUI();
+
         Debug.Log("HP: " + hp + " | Shield: " + shield);
 
         StartCoroutine(DamageCooldown());
@@ -82,6 +109,7 @@ public class PlayerHealth : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     void UpdateShieldVisual()
     {
         if (shieldVisual != null)
@@ -95,6 +123,7 @@ public class PlayerHealth : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         canTakeDamage = true;
     }
+
     IEnumerator KnockbackCooldown()
     {
         PlayerController controller = GetComponent<PlayerController>();
@@ -119,12 +148,13 @@ public class PlayerHealth : MonoBehaviour
             TakeDamage(1, col.transform.position);
         }
     }
+
     void UpdateHPUI()
     {
         if (hpSlider != null)
-        {
-            shielSlider.value = shield;
             hpSlider.value = hp;
-        }
+
+        if (shielSlider != null)
+            shielSlider.value = shield;
     }
 }
