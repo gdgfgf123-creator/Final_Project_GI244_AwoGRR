@@ -8,7 +8,9 @@ public class PlayerHealth : MonoBehaviour
 
     public int maxShield = 5;
     public int shield;
+
     public Slider hpSlider;
+    public Slider shielSlider;
 
     public float knockbackForce = 5f;
 
@@ -24,6 +26,8 @@ public class PlayerHealth : MonoBehaviour
         hp = maxHP;
         shield = maxShield;
 
+        shielSlider.maxValue = maxShield;
+        shielSlider.value = shield;
         hpSlider.maxValue = maxHP;   
         hpSlider.value = hp;         
 
@@ -31,7 +35,6 @@ public class PlayerHealth : MonoBehaviour
 
         InvokeRepeating(nameof(AutoHeal), 5f, 5f);
     }
-
     void AutoHeal()
     {
         if (hp < maxHP)
@@ -41,7 +44,6 @@ public class PlayerHealth : MonoBehaviour
             Debug.Log("Heal +1 | HP: " + hp);
         }
     }
-
     public void TakeDamage(int dmg, Vector2 enemyPos)
     {
         if (!canTakeDamage) return;
@@ -63,13 +65,12 @@ public class PlayerHealth : MonoBehaviour
         {
             hp -= dmg;
         }
-
-        // ?? Knockback
+        //Knockback
         Vector2 dir = (transform.position - (Vector3)enemyPos).normalized;
         rb.linearVelocity = Vector2.zero;
         rb.AddForce(dir * knockbackForce, ForceMode2D.Impulse);
 
-        UpdateShieldVisual(); // ?? ÍÑ»à´µâÅè
+        UpdateShieldVisual(); // ÍÑ»à´µâÅè
         UpdateHPUI();
         Debug.Log("HP: " + hp + " | Shield: " + shield);
 
@@ -81,7 +82,6 @@ public class PlayerHealth : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
     void UpdateShieldVisual()
     {
         if (shieldVisual != null)
@@ -95,7 +95,6 @@ public class PlayerHealth : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         canTakeDamage = true;
     }
-
     IEnumerator KnockbackCooldown()
     {
         PlayerController controller = GetComponent<PlayerController>();
@@ -124,6 +123,7 @@ public class PlayerHealth : MonoBehaviour
     {
         if (hpSlider != null)
         {
+            shielSlider.value = shield;
             hpSlider.value = hp;
         }
     }
