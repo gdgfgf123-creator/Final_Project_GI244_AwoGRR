@@ -10,7 +10,9 @@ public class Enemy : MonoBehaviour
     public int maxShield = 2;
     public int shield;
 
-    public GameObject shieldVisual; // ??? โล่ของ Enemy
+    public GameObject shieldVisual;
+
+    public WaveSpawner spawner; // ?? เพิ่มตรงนี้
 
     private Transform player;
 
@@ -56,12 +58,17 @@ public class Enemy : MonoBehaviour
             hp -= dmg;
         }
 
-        UpdateShieldVisual(); 
+        UpdateShieldVisual();
 
         Debug.Log("Enemy HP: " + hp + " | Shield: " + shield);
 
         if (hp <= 0)
         {
+            if (spawner != null)
+            {
+                spawner.EnemyDied(); // ?? สำคัญมาก
+            }
+
             Destroy(gameObject);
         }
     }
