@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 5f;
-
+    public SpriteRenderer firePointSprite;
     public GameObject normalBullet;
     public GameObject homingBullet;
 
@@ -91,6 +91,8 @@ public class PlayerController : MonoBehaviour
         StopAllCoroutines();
 
         currentBullet = homingBullet;
+        if (firePointSprite != null)
+            firePointSprite.color = Color.red;
 
         Debug.Log("?? เปลี่ยนเป็น Homing");
 

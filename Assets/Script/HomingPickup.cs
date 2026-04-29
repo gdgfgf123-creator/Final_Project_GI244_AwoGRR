@@ -8,17 +8,18 @@ public class HomingPickup : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            Debug.Log("?? เก็บ Homing");
+            Debug.Log("เก็บ Homing");
 
             PlayerController player = col.GetComponent<PlayerController>();
 
             if (player != null)
             {
+                // ?? เปลี่ยนกระสุน + เปลี่ยนสีปากปืน (อยู่ใน PlayerController)
                 player.SetHomingBullet(duration);
             }
             else
             {
-                Debug.LogError("? หา PlayerController ไม่เจอ");
+                Debug.LogError("หา PlayerController ไม่เจอ");
             }
 
             Destroy(gameObject);
