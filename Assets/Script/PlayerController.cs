@@ -1,18 +1,20 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     public float speed = 5f;
     public GameObject bulletPrefab;
     public Transform firePoint;
-
+    
     private Rigidbody2D rb;
     private Vector2 moveInput;
     public bool isKnockback = false;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+
     }
 
     void Update()

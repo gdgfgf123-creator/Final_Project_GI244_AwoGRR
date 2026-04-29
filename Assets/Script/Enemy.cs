@@ -4,15 +4,24 @@ public class Enemy : MonoBehaviour
 {
     public float speed = 2f;
 
-    public int hp = 3;
-    public int shield = 2;
+    public int maxHP = 3;
+    public int hp;
+
+    public int maxShield = 2;
+    public int shield;
+
+    public GameObject shieldVisual; // ??? โล่ของ Enemy
 
     private Transform player;
 
     void Start()
     {
-        GameObject p = GameObject.FindGameObjectWithTag("Player");
+        hp = maxHP;
+        shield = maxShield;
 
+        UpdateShieldVisual();
+
+        GameObject p = GameObject.FindGameObjectWithTag("Player");
         if (p != null)
         {
             player = p.transform;
@@ -23,12 +32,13 @@ public class Enemy : MonoBehaviour
     {
         if (player == null) return;
 
-        // ?? ไล่ Player
-        Vector2 dir = (player.position - transform.position).normalized;
-        transform.position += (Vector3)(dir * speed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(
+            transform.position,
+            player.position,
+            speed * Time.deltaTime
+        );
     }
 
-    // ?? รับดาเมจจากกระสุน
     public void TakeDamage(int dmg)
     {
         if (shield > 0)
@@ -46,6 +56,8 @@ public class Enemy : MonoBehaviour
             hp -= dmg;
         }
 
+        UpdateShieldVisual(); 
+
         Debug.Log("Enemy HP: " + hp + " | Shield: " + shield);
 
         if (hp <= 0)
@@ -54,7 +66,14 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    // ?? ชน Player แล้วทำดาเมจ
+    void UpdateShieldVisual()
+    {
+        if (shieldVisual != null)
+        {
+            shieldVisual.SetActive(shield > 0);
+        }
+    }
+
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Player"))

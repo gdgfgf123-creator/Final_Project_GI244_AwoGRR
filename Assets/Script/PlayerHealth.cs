@@ -1,12 +1,18 @@
 using System.Collections;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class PlayerHealth : MonoBehaviour
 {
-    public int hp = 10;
-    public int shield = 5;
+    public int maxHP = 10;
+    public int hp;
+
+    public int maxShield = 5;
+    public int shield;
+    public Slider hpSlider;
 
     public float knockbackForce = 5f;
+
+    public GameObject shieldVisual; 
 
     private Rigidbody2D rb;
     private bool canTakeDamage = true;
@@ -15,20 +21,33 @@ public class PlayerHealth : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 
-        // ?? Auto Heal ทุก 5 วินาที
+        hp = maxHP;
+        shield = maxShield;
+
+        hpSlider.maxValue = maxHP;   
+        hpSlider.value = hp;         
+
+        UpdateShieldVisual();
+
         InvokeRepeating(nameof(AutoHeal), 5f, 5f);
     }
 
     void AutoHeal()
     {
-        hp += 1;
-        Debug.Log("Heal +1 | HP: " + hp);
+        if (hp < maxHP)
+        {
+            hp += 1;
+            UpdateHPUI();
+            Debug.Log("Heal +1 | HP: " + hp);
+        }
     }
 
     public void TakeDamage(int dmg, Vector2 enemyPos)
     {
         if (!canTakeDamage) return;
-        StartCoroutine(KnockbackCooldown());
+
+        canTakeDamage = false;
+
         // ??? Shield ก่อน
         if (shield > 0)
         {
@@ -47,12 +66,15 @@ public class PlayerHealth : MonoBehaviour
 
         // ?? Knockback
         Vector2 dir = (transform.position - (Vector3)enemyPos).normalized;
+        rb.linearVelocity = Vector2.zero;
         rb.AddForce(dir * knockbackForce, ForceMode2D.Impulse);
 
+        UpdateShieldVisual(); // ?? อัปเดตโล่
+        UpdateHPUI();
         Debug.Log("HP: " + hp + " | Shield: " + shield);
 
-        // ?? กันโดนรัว
         StartCoroutine(DamageCooldown());
+        StartCoroutine(KnockbackCooldown());
 
         if (hp <= 0)
         {
@@ -60,12 +82,20 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    void UpdateShieldVisual()
+    {
+        if (shieldVisual != null)
+        {
+            shieldVisual.SetActive(shield > 0);
+        }
+    }
+
     IEnumerator DamageCooldown()
     {
-        canTakeDamage = false;
         yield return new WaitForSeconds(0.5f);
         canTakeDamage = true;
     }
+
     IEnumerator KnockbackCooldown()
     {
         PlayerController controller = GetComponent<PlayerController>();
@@ -82,11 +112,19 @@ public class PlayerHealth : MonoBehaviour
             controller.isKnockback = false;
         }
     }
+
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Enemy"))
         {
             TakeDamage(1, col.transform.position);
+        }
+    }
+    void UpdateHPUI()
+    {
+        if (hpSlider != null)
+        {
+            hpSlider.value = hp;
         }
     }
 }
