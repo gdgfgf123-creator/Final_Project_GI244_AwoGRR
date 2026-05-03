@@ -4,14 +4,13 @@ using UnityEngine;
 public class WaveSpawner : MonoBehaviour
 {
     [Header("Enemy")]
-    public GameObject enemyPrefab;
+    public GameObject[] enemyPrefab;
     public Transform[] spawnPoints;
 
     [Header("Wave Setting")]
     public int waveNumber = 1;
     public int maxWaves = 5;
 
-    // ?? กำหนดจำนวนศัตรูแต่ละ Wave เอง
     public int[] waveEnemyCount = { 3, 5, 10, 15, 20 };
 
     [Header("Timing")]
@@ -36,14 +35,13 @@ public class WaveSpawner : MonoBehaviour
 
         int spawnCount = 0;
 
-        // ?? เช็คว่ามีค่าที่กำหนดไว้ไหม
         if (waveNumber - 1 < waveEnemyCount.Length)
         {
             spawnCount = waveEnemyCount[waveNumber - 1];
         }
         else
         {
-            spawnCount = 5; // fallback ถ้าเกิน array
+            spawnCount = 5;
         }
 
         for (int i = 0; i < spawnCount; i++)
@@ -57,11 +55,13 @@ public class WaveSpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        int rand = Random.Range(0, spawnPoints.Length);
+        
+        int randPoint = Random.Range(0, spawnPoints.Length);
+        int randEnemy = Random.Range(0, enemyPrefab.Length);
 
         GameObject enemy = Instantiate(
-            enemyPrefab,
-            spawnPoints[rand].position,
+            enemyPrefab[randEnemy],
+            spawnPoints[randPoint].position,
             Quaternion.identity
         );
 
@@ -82,7 +82,7 @@ public class WaveSpawner : MonoBehaviour
         {
             if (waveNumber >= maxWaves)
             {
-                Debug.Log("?? All Waves Completed!");
+                Debug.Log("All Waves Completed!");
                 return;
             }
 
