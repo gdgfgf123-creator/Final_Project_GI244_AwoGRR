@@ -19,6 +19,7 @@ public class PlayerHealth : MonoBehaviour
 
     private Rigidbody2D rb;
     private bool canTakeDamage = true;
+    private bool isDead = false; 
 
     void Start()
     {
@@ -27,7 +28,6 @@ public class PlayerHealth : MonoBehaviour
         hp = maxHP;
         shield = maxShield;
 
-        // ?? ตั้งค่า UI
         if (hpSlider != null)
         {
             hpSlider.maxValue = maxHP;
@@ -47,15 +47,13 @@ public class PlayerHealth : MonoBehaviour
 
     void AutoHeal()
     {
-        if (hp < maxHP)
+        if (hp < maxHP && !isDead)
         {
             hp += 1;
             UpdateHPUI();
-            Debug.Log("Heal +1 | HP: " + hp);
         }
     }
 
-    // ?? ฟังก์ชันเพิ่มโล่ (ตัวที่ error)
     public void AddShield(int amount)
     {
         shield += amount;
@@ -65,33 +63,27 @@ public class PlayerHealth : MonoBehaviour
 
         UpdateShieldVisual();
         UpdateHPUI();
-
-        Debug.Log("Shield: " + shield);
     }
 
     public void TakeDamage(int dmg, Vector2 enemyPos)
     {
-        if (!canTakeDamage) return;
+        if (!canTakeDamage || isDead) return;
 
         canTakeDamage = false;
-
-        // ??? โล่รับก่อน
         if (shield > 0)
         {
-            shield -= dmg;
+            int damageToShield = Mathf.Min(shield, dmg);
+            shield -= damageToShield;
 
-            if (shield < 0)
-            {
-                hp += shield;
-                shield = 0;
-            }
+            int leftover = dmg - damageToShield;
+            hp -= leftover;
         }
         else
         {
             hp -= dmg;
         }
 
-        // ?? Knockback
+        // Knockback
         Vector2 dir = (transform.position - (Vector3)enemyPos).normalized;
         rb.linearVelocity = Vector2.zero;
         rb.AddForce(dir * knockbackForce, ForceMode2D.Impulse);
@@ -99,15 +91,24 @@ public class PlayerHealth : MonoBehaviour
         UpdateShieldVisual();
         UpdateHPUI();
 
-        Debug.Log("HP: " + hp + " | Shield: " + shield);
-
         StartCoroutine(DamageCooldown());
         StartCoroutine(KnockbackCooldown());
 
         if (hp <= 0)
         {
-            Destroy(gameObject);
+            Die();
         }
+    }
+
+    void Die()
+    {
+        if (isDead) return;
+
+        isDead = true;
+
+        GameManager.instance.GameOver();
+
+        Destroy(gameObject);
     }
 
     void UpdateShieldVisual()
@@ -129,16 +130,12 @@ public class PlayerHealth : MonoBehaviour
         PlayerController controller = GetComponent<PlayerController>();
 
         if (controller != null)
-        {
             controller.isKnockback = true;
-        }
 
         yield return new WaitForSeconds(0.2f);
 
         if (controller != null)
-        {
             controller.isKnockback = false;
-        }
     }
 
     void OnCollisionEnter2D(Collision2D col)

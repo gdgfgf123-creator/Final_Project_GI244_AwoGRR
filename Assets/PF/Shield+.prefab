@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8473465160995208060}
   - component: {fileID: 4235877473847753698}
   - component: {fileID: 7442048037508280141}
-  - component: {fileID: 9010020927616961408}
+  - component: {fileID: 4576896103128241044}
   m_Layer: 0
   m_Name: Shield+
   m_TagString: Untagged
@@ -143,7 +143,7 @@ PolygonCollider2D:
       - {x: -0.5, y: -0.28866667}
       - {x: 0.5, y: -0.28866667}
   m_UseDelaunayMesh: 1
---- !u!114 &9010020927616961408
+--- !u!114 &4576896103128241044
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5130318709933379805}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f4099a5adad66845b8826fd30d604f9, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b824cc4e2d27da4db4a0d580aebc9a5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HomingPickup
-  duration: 5
+  m_EditorClassIdentifier: Assembly-CSharp::ShieldPickup
+  shieldAmount: 1

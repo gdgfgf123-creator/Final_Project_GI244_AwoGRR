@@ -14,7 +14,7 @@ public class HomingPickup : MonoBehaviour
 
             if (player != null)
             {
-                // ?? เปลี่ยนกระสุน + เปลี่ยนสีปากปืน (อยู่ใน PlayerController)
+                
                 player.SetHomingBullet(duration);
             }
             else

@@ -75,7 +75,6 @@ public class PlayerController : MonoBehaviour
             }
 
             Debug.Log("ยิง: " + currentBullet.name);
-
             Instantiate(currentBullet, firePoint.position, firePoint.rotation);
         }
     }
@@ -104,7 +103,8 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(duration);
 
         currentBullet = normalBullet;
-
+        if (firePointSprite != null)
+            firePointSprite.color = Color.gray;
         Debug.Log("? กลับเป็นปกติ");
     }
 }

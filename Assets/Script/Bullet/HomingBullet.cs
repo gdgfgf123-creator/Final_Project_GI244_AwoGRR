@@ -17,12 +17,12 @@ public class HomingBullet : MonoBehaviour
 
     void Update()
     {
-        // ?? ถ้าไม่มีเป้า ? หาใหม่
+        
         if (target == null)
         {
             FindTarget();
 
-            // ถ้ายังไม่มี ? ยิงตรง
+            
             transform.Translate(Vector2.up * speed * Time.deltaTime);
             return;
         }

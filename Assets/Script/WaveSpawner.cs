@@ -1,28 +1,33 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI; 
 
 public class WaveSpawner : MonoBehaviour
 {
     [Header("Enemy")]
-    public GameObject enemyPrefab;
+    public GameObject[] enemyPrefab;
     public Transform[] spawnPoints;
 
     [Header("Wave Setting")]
     public int waveNumber = 1;
     public int maxWaves = 5;
-
-    // ?? กำหนดจำนวนศัตรูแต่ละ Wave เอง
     public int[] waveEnemyCount = { 3, 5, 10, 15, 20 };
 
     [Header("Timing")]
     public float spawnDelay = 0.5f;
     public float timeBetweenWaves = 3f;
 
+    [Header("UI")]
+    public TMPro.TextMeshProUGUI waveText;
+    public TMPro.TextMeshProUGUI enemyText;
+
+
     private int enemiesAlive = 0;
     private bool isSpawning = false;
 
     void Start()
     {
+        UpdateUI(); 
         StartCoroutine(StartWave());
     }
 
@@ -30,21 +35,13 @@ public class WaveSpawner : MonoBehaviour
     {
         yield return new WaitForSeconds(timeBetweenWaves);
 
-        Debug.Log("Wave " + waveNumber + " Start!");
+        Debug.Log("?? Wave " + waveNumber + " Start!");
 
         isSpawning = true;
 
-        int spawnCount = 0;
-
-        // ?? เช็คว่ามีค่าที่กำหนดไว้ไหม
-        if (waveNumber - 1 < waveEnemyCount.Length)
-        {
-            spawnCount = waveEnemyCount[waveNumber - 1];
-        }
-        else
-        {
-            spawnCount = 5; // fallback ถ้าเกิน array
-        }
+        int spawnCount = (waveNumber - 1 < waveEnemyCount.Length)
+            ? waveEnemyCount[waveNumber - 1]
+            : 5;
 
         for (int i = 0; i < spawnCount; i++)
         {
@@ -57,15 +54,17 @@ public class WaveSpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        int rand = Random.Range(0, spawnPoints.Length);
+        int randPoint = Random.Range(0, spawnPoints.Length);
+        int randEnemy = Random.Range(0, enemyPrefab.Length);
 
         GameObject enemy = Instantiate(
-            enemyPrefab,
-            spawnPoints[rand].position,
+            enemyPrefab[randEnemy],
+            spawnPoints[randPoint].position,
             Quaternion.identity
         );
 
         enemiesAlive++;
+        UpdateUI(); 
 
         Enemy enemyScript = enemy.GetComponent<Enemy>();
         if (enemyScript != null)
@@ -77,6 +76,7 @@ public class WaveSpawner : MonoBehaviour
     public void EnemyDied()
     {
         enemiesAlive--;
+        UpdateUI(); 
 
         if (enemiesAlive <= 0 && !isSpawning)
         {
@@ -87,7 +87,17 @@ public class WaveSpawner : MonoBehaviour
             }
 
             waveNumber++;
+            UpdateUI(); 
             StartCoroutine(StartWave());
         }
+    }
+
+    void UpdateUI()
+    {
+        if (waveText != null)
+            waveText.text = "Wave : " + waveNumber + " / " + maxWaves;
+
+        if (enemyText != null)
+            enemyText.text = "Enemy : " + enemiesAlive;
     }
 }
