@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI; 
 
 public class WaveSpawner : MonoBehaviour
 {
@@ -10,18 +11,23 @@ public class WaveSpawner : MonoBehaviour
     [Header("Wave Setting")]
     public int waveNumber = 1;
     public int maxWaves = 5;
-
     public int[] waveEnemyCount = { 3, 5, 10, 15, 20 };
 
     [Header("Timing")]
     public float spawnDelay = 0.5f;
     public float timeBetweenWaves = 3f;
 
+    [Header("UI")]
+    public TMPro.TextMeshProUGUI waveText;
+    public TMPro.TextMeshProUGUI enemyText;
+
+
     private int enemiesAlive = 0;
     private bool isSpawning = false;
 
     void Start()
     {
+        UpdateUI(); 
         StartCoroutine(StartWave());
     }
 
@@ -29,20 +35,13 @@ public class WaveSpawner : MonoBehaviour
     {
         yield return new WaitForSeconds(timeBetweenWaves);
 
-        Debug.Log("Wave " + waveNumber + " Start!");
+        Debug.Log("?? Wave " + waveNumber + " Start!");
 
         isSpawning = true;
 
-        int spawnCount = 0;
-
-        if (waveNumber - 1 < waveEnemyCount.Length)
-        {
-            spawnCount = waveEnemyCount[waveNumber - 1];
-        }
-        else
-        {
-            spawnCount = 5;
-        }
+        int spawnCount = (waveNumber - 1 < waveEnemyCount.Length)
+            ? waveEnemyCount[waveNumber - 1]
+            : 5;
 
         for (int i = 0; i < spawnCount; i++)
         {
@@ -55,7 +54,6 @@ public class WaveSpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        
         int randPoint = Random.Range(0, spawnPoints.Length);
         int randEnemy = Random.Range(0, enemyPrefab.Length);
 
@@ -66,6 +64,7 @@ public class WaveSpawner : MonoBehaviour
         );
 
         enemiesAlive++;
+        UpdateUI(); 
 
         Enemy enemyScript = enemy.GetComponent<Enemy>();
         if (enemyScript != null)
@@ -77,17 +76,28 @@ public class WaveSpawner : MonoBehaviour
     public void EnemyDied()
     {
         enemiesAlive--;
+        UpdateUI(); 
 
         if (enemiesAlive <= 0 && !isSpawning)
         {
             if (waveNumber >= maxWaves)
             {
-                Debug.Log("All Waves Completed!");
+                Debug.Log("?? All Waves Completed!");
                 return;
             }
 
             waveNumber++;
+            UpdateUI(); 
             StartCoroutine(StartWave());
         }
+    }
+
+    void UpdateUI()
+    {
+        if (waveText != null)
+            waveText.text = "Wave : " + waveNumber + " / " + maxWaves;
+
+        if (enemyText != null)
+            enemyText.text = "Enemy : " + enemiesAlive;
     }
 }

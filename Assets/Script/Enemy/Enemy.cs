@@ -12,9 +12,10 @@ public class Enemy : MonoBehaviour
 
     public GameObject shieldVisual;
 
-    public WaveSpawner spawner; // ?? เพิ่มตรงนี้
+    public WaveSpawner spawner;
 
     private Transform player;
+    private bool isDead = false; 
 
     void Start()
     {
@@ -32,7 +33,7 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        if (player == null) return;
+        if (player == null || isDead) return;
 
         transform.position = Vector2.MoveTowards(
             transform.position,
@@ -43,15 +44,15 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int dmg)
     {
+        if (isDead) return; 
+
         if (shield > 0)
         {
-            shield -= dmg;
+            int damageToShield = Mathf.Min(shield, dmg);
+            shield -= damageToShield;
 
-            if (shield < 0)
-            {
-                hp += shield;
-                shield = 0;
-            }
+            int leftoverDamage = dmg - damageToShield;
+            hp -= leftoverDamage;
         }
         else
         {
@@ -64,13 +65,22 @@ public class Enemy : MonoBehaviour
 
         if (hp <= 0)
         {
-            if (spawner != null)
-            {
-                spawner.EnemyDied(); // ?? สำคัญมาก
-            }
-
-            Destroy(gameObject);
+            Die();
         }
+    }
+
+    void Die()
+    {
+        if (isDead) return;
+
+        isDead = true;
+
+        if (spawner != null)
+        {
+            spawner.EnemyDied();
+        }
+
+        Destroy(gameObject);
     }
 
     void UpdateShieldVisual()
@@ -83,6 +93,8 @@ public class Enemy : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
+        if (isDead) return;
+
         if (col.gameObject.CompareTag("Player"))
         {
             PlayerHealth playerHealth = col.gameObject.GetComponent<PlayerHealth>();
