@@ -661,7 +661,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6864f6412e747b545a9501bab75d133b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DashEnemy
-  dashForce: 10
+  dashForce: 15
   cooldown: 2
 --- !u!114 &4253380820681934351
 MonoBehaviour:

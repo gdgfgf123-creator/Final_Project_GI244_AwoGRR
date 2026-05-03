@@ -104,7 +104,7 @@ public class PlayerController : MonoBehaviour
 
         currentBullet = normalBullet;
         if (firePointSprite != null)
-            firePointSprite.color = Color.white;
+            firePointSprite.color = Color.gray;
         Debug.Log("? กลับเป็นปกติ");
     }
 }
