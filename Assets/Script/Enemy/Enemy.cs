@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
@@ -9,7 +10,8 @@ public class Enemy : MonoBehaviour
 
     public int maxShield = 2;
     public int shield;
-
+    public Slider hpSlider;
+    public Slider shielSlider;
     public GameObject shieldVisual;
 
     public WaveSpawner spawner;
@@ -21,9 +23,19 @@ public class Enemy : MonoBehaviour
     {
         hp = maxHP;
         shield = maxShield;
+        if (hpSlider != null)
+        {
+            hpSlider.maxValue = maxHP;
+            hpSlider.value = hp;
+        }
 
+        if (shielSlider != null)
+        {
+            shielSlider.maxValue = maxShield;
+            shielSlider.value = shield;
+        }
         UpdateShieldVisual();
-
+        UpdateHPUI();
         GameObject p = GameObject.FindGameObjectWithTag("Player");
         if (p != null)
         {
@@ -58,7 +70,7 @@ public class Enemy : MonoBehaviour
         {
             hp -= dmg;
         }
-
+        UpdateHPUI();
         UpdateShieldVisual();
 
         Debug.Log("Enemy HP: " + hp + " | Shield: " + shield);
@@ -90,7 +102,14 @@ public class Enemy : MonoBehaviour
             shieldVisual.SetActive(shield > 0);
         }
     }
+    void UpdateHPUI()
+    {
+        if (hpSlider != null)
+            hpSlider.value = hp;
 
+        if (shielSlider != null)
+            shielSlider.value = shield;
+    }
     void OnCollisionEnter2D(Collision2D col)
     {
         if (isDead) return;
