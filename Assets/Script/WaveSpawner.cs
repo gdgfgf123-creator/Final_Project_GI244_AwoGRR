@@ -54,6 +54,12 @@ public class WaveSpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
+        if (spawnPoints.Length == 0 || enemyPrefab.Length == 0)
+        {
+            Debug.LogError("SpawnPoints or EnemyPrefab is EMPTY!");
+            return;
+        }
+
         int randPoint = Random.Range(0, spawnPoints.Length);
         int randEnemy = Random.Range(0, enemyPrefab.Length);
 
@@ -64,7 +70,7 @@ public class WaveSpawner : MonoBehaviour
         );
 
         enemiesAlive++;
-        UpdateUI(); 
+        UpdateUI();
 
         Enemy enemyScript = enemy.GetComponent<Enemy>();
         if (enemyScript != null)
