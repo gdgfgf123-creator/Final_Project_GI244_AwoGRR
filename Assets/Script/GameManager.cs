@@ -22,23 +22,28 @@ public class GameManager : MonoBehaviour
         if (gameOverUI != null)
             gameOverUI.SetActive(false);
     }
-
     public void StartGame()
     {
         mainMenuPanel.SetActive(false);
         levelSelectPanel.SetActive(true);
     }
 
+    public void BackToMenu()
+    {
+        mainMenuPanel.SetActive(true);
+        levelSelectPanel.SetActive(false);
+    }
+
     public void LoadLevel1()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Lv1");
+        SceneManager.LoadScene("LV1");
     }
 
     public void LoadLevel2()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Lv2");
+        SceneManager.LoadScene("LV2");
     }
 
     public void GameOver()
