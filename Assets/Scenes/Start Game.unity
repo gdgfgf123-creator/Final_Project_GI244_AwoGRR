@@ -131,6 +131,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 5871530007372087925, guid: 8656026d102c0a94a946db5013963347, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6055410803690770004, guid: 8656026d102c0a94a946db5013963347, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: BackToMenu
+      objectReference: {fileID: 0}
     - target: {fileID: 9002844143896275520, guid: 8656026d102c0a94a946db5013963347, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.53237
