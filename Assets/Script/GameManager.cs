@@ -16,9 +16,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        mainMenuPanel.SetActive(true);
-        levelSelectPanel.SetActive(false);
-
         if (gameOverUI != null)
             gameOverUI.SetActive(false);
     }
