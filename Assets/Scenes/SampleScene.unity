@@ -1441,6 +1441,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 2608338641371297344, guid: 8656026d102c0a94a946db5013963347, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5871530007372087925, guid: 8656026d102c0a94a946db5013963347, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6065633986458298875, guid: 8656026d102c0a94a946db5013963347, type: 3}
       propertyPath: m_Color.b
       value: 1
