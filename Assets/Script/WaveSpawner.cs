@@ -4,20 +4,17 @@ using TMPro;
 
 public class WaveSpawner : MonoBehaviour
 {
-    [Header("Enemy")]
     public GameObject[] enemyPrefab;
     public Transform[] spawnPoints;
-
-    [Header("Wave Setting")]
+    
     public int waveNumber = 1;
     public int maxWaves = 5;
     public int[] waveEnemyCount = { 3, 5, 10, 15, 20 };
-
-    [Header("Timing")]
+    
     public float spawnDelay = 0.5f;
     public int countdownTime = 3;
-
-    [Header("UI")]
+    public float timeBetweenWaves = 3f;
+    
     public TextMeshProUGUI waveText;
     public TextMeshProUGUI enemyText;
     public TextMeshProUGUI countdownText;
@@ -34,32 +31,38 @@ public class WaveSpawner : MonoBehaviour
 
     IEnumerator StartWave()
     {
-        if (countdownText != null)
-        {
-            countdownText.gameObject.SetActive(true);
-        }
-
-        int currentCountdown = countdownTime;
-        while (currentCountdown > 0)
+        if (waveNumber == 1)
         {
             if (countdownText != null)
             {
-                countdownText.text = currentCountdown.ToString();
+                countdownText.gameObject.SetActive(true);
             }
-            yield return new WaitForSeconds(1f);
-            currentCountdown--;
-        }
 
-        if (countdownText != null)
+            int currentCountdown = countdownTime;
+            while (currentCountdown > 0)
+            {
+                if (countdownText != null)
+                {
+                    countdownText.text = currentCountdown.ToString();
+                }
+                yield return new WaitForSeconds(1f);
+                currentCountdown--;
+            }
+
+            if (countdownText != null)
+            {
+                countdownText.text = "START!";
+                yield return new WaitForSeconds(1f);
+                countdownText.gameObject.SetActive(false);
+            }
+        }
+        else
         {
-            countdownText.text = "START!";
-            yield return new WaitForSeconds(1f);
-            countdownText.gameObject.SetActive(false);
+            yield return new WaitForSeconds(timeBetweenWaves);
         }
         
 
-
-        Debug.Log("?? Wave " + waveNumber + " Start!");
+        Debug.Log("Wave " + waveNumber + " Start!");
 
         isSpawning = true;
 
@@ -112,7 +115,7 @@ public class WaveSpawner : MonoBehaviour
         {
             if (waveNumber >= maxWaves)
             {
-                Debug.Log("?? All Waves Completed!");
+                Debug.Log("All Waves Completed!");
                 return;
             }
 
