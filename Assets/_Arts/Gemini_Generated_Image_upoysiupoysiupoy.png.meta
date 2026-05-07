@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 3bb4d26f32678e245af78425c5c53b63
+guid: 2a92670c624c0a743b486d67400c4ef6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -165121984393641043
-    second: png-transparent-werewolf-head-wolf-black-werewolf-with-sharp-teeth-and-glowing-eyes_0
+      213: -7254635050937923229
+    second: Gemini_Generated_Image_upoysiupoysiupoy_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,17 +96,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: png-transparent-werewolf-head-wolf-black-werewolf-with-sharp-teeth-and-glowing-eyes_0
+      name: Gemini_Generated_Image_upoysiupoysiupoy_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 920
-        height: 947
+        width: 1376
+        height: 768
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: da30c971e6e55bdf0800000000000000
-      internalID: -165121984393641043
+      spriteID: 3694fbd9bdb525b90800000000000000
+      internalID: -7254635050937923229
       vertices: []
       indices: 
       edges: []
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      png-transparent-werewolf-head-wolf-black-werewolf-with-sharp-teeth-and-glowing-eyes_0: -165121984393641043
+      Gemini_Generated_Image_upoysiupoysiupoy_0: -7254635050937923229
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

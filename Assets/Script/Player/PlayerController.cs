@@ -23,7 +23,6 @@ public class PlayerController : MonoBehaviour
 
         if (normalBullet == null)
         {
-            Debug.LogError("? normalBullet ยังไม่ได้ใส่!");
             return;
         }
 
@@ -35,13 +34,20 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if (isKnockback) return;
-
-        Move();
+        
+        ReadInput();
         Aim();
         Shoot();
     }
-
-    void Move()
+    
+    void FixedUpdate()
+    {
+        if (isKnockback) return;
+        
+        rb.linearVelocity = moveInput * speed;
+    }
+    
+    void ReadInput()
     {
         float x = 0;
         float y = 0;
@@ -52,7 +58,6 @@ public class PlayerController : MonoBehaviour
         if (Keyboard.current.wKey.isPressed) y = 1;
 
         moveInput = new Vector2(x, y).normalized;
-        rb.linearVelocity = moveInput * speed;
     }
 
     void Aim()
@@ -70,11 +75,9 @@ public class PlayerController : MonoBehaviour
         {
             if (currentBullet == null)
             {
-                Debug.LogError("? currentBullet เป็น null!");
                 return;
             }
 
-            Debug.Log("ยิง: " + currentBullet.name);
             Instantiate(currentBullet, firePoint.position, firePoint.rotation);
         }
     }
@@ -83,7 +86,6 @@ public class PlayerController : MonoBehaviour
     {
         if (homingBullet == null)
         {
-            Debug.LogError("? homingBullet ยังไม่ได้ใส่!");
             return;
         }
 
@@ -92,8 +94,6 @@ public class PlayerController : MonoBehaviour
         currentBullet = homingBullet;
         if (firePointSprite != null)
             firePointSprite.color = Color.red;
-
-        Debug.Log("?? เปลี่ยนเป็น Homing");
 
         StartCoroutine(HomingDuration(duration));
     }
@@ -105,6 +105,5 @@ public class PlayerController : MonoBehaviour
         currentBullet = normalBullet;
         if (firePointSprite != null)
             firePointSprite.color = Color.gray;
-        Debug.Log("? กลับเป็นปกติ");
     }
 }

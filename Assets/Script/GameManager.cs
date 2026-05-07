@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     public GameObject mainMenuPanel;
     public GameObject levelSelectPanel;
     public GameObject gameOverUI;
+    
+    private static bool isMuted = false; 
 
     void Awake()
     {
@@ -19,6 +21,22 @@ public class GameManager : MonoBehaviour
         if (gameOverUI != null)
             gameOverUI.SetActive(false);
     }
+    
+    public void ToggleSoundButton()
+    {
+        isMuted = !isMuted;
+        
+        if (isMuted)
+        {
+            AudioListener.volume = 0f; 
+        }
+        else
+        {
+            AudioListener.volume = 1f; 
+        }
+    }
+   
+
     public void StartGame()
     {
         mainMenuPanel.SetActive(false);
@@ -50,22 +68,22 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 0f;
     }
+
     public void QuitGame()
     {
-        Debug.Log("Quit Game");
-
         Application.Quit(); 
 
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #endif
     }
+
     public void RestartGame()
     {
-        Debug.Log("Restart Clicked!");
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
     public void BackToMainMenuScene()
     {
         Time.timeScale = 1f;
