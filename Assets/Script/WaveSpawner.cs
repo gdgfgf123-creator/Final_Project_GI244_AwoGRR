@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class WaveSpawner : MonoBehaviour
 {
@@ -116,6 +117,13 @@ public class WaveSpawner : MonoBehaviour
             if (waveNumber >= maxWaves)
             {
                 Debug.Log("All Waves Completed!");
+    
+                PlayerPrefs.SetInt("LevelPassed", 1);
+                PlayerPrefs.Save();
+
+                
+                SceneManager.LoadScene("Start Game"); 
+                // ----------------------------
                 return;
             }
 
