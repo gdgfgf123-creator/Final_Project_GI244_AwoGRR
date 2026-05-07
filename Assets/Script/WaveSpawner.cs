@@ -1,6 +1,6 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI; 
+using TMPro;
 
 public class WaveSpawner : MonoBehaviour
 {
@@ -15,11 +15,12 @@ public class WaveSpawner : MonoBehaviour
 
     [Header("Timing")]
     public float spawnDelay = 0.5f;
-    public float timeBetweenWaves = 3f;
+    public int countdownTime = 3;
 
     [Header("UI")]
-    public TMPro.TextMeshProUGUI waveText;
-    public TMPro.TextMeshProUGUI enemyText;
+    public TextMeshProUGUI waveText;
+    public TextMeshProUGUI enemyText;
+    public TextMeshProUGUI countdownText;
 
 
     private int enemiesAlive = 0;
@@ -33,7 +34,30 @@ public class WaveSpawner : MonoBehaviour
 
     IEnumerator StartWave()
     {
-        yield return new WaitForSeconds(timeBetweenWaves);
+        if (countdownText != null)
+        {
+            countdownText.gameObject.SetActive(true);
+        }
+
+        int currentCountdown = countdownTime;
+        while (currentCountdown > 0)
+        {
+            if (countdownText != null)
+            {
+                countdownText.text = currentCountdown.ToString();
+            }
+            yield return new WaitForSeconds(1f);
+            currentCountdown--;
+        }
+
+        if (countdownText != null)
+        {
+            countdownText.text = "START!";
+            yield return new WaitForSeconds(1f);
+            countdownText.gameObject.SetActive(false);
+        }
+        
+
 
         Debug.Log("?? Wave " + waveNumber + " Start!");
 
