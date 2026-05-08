@@ -8,6 +8,9 @@ public class HomingBullet : MonoBehaviour
     public int damage = 1;
 
     private Transform target;
+    
+    private float searchTimer = 0f;
+    private float searchInterval = 0.2f;
 
     void Start()
     {
@@ -17,28 +20,33 @@ public class HomingBullet : MonoBehaviour
 
     void Update()
     {
-        
-        if (target == null)
+        if (target == null || !target.gameObject.activeInHierarchy)
         {
-            FindTarget();
-
+            searchTimer -= Time.deltaTime;
+            if (searchTimer <= 0f)
+            {
+                FindTarget();
+                searchTimer = searchInterval;
+            }
             
             transform.Translate(Vector2.up * speed * Time.deltaTime);
             return;
         }
-
+        
         Vector2 direction = (Vector2)target.position - (Vector2)transform.position;
         direction.Normalize();
 
         float rotateAmount = Vector3.Cross(direction, transform.up).z;
         transform.Rotate(0, 0, -rotateAmount * rotateSpeed * Time.deltaTime);
-
+        
         transform.Translate(Vector2.up * speed * Time.deltaTime);
     }
 
     void FindTarget()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        
+        if (enemies.Length == 0) return;
 
         float closestDist = Mathf.Infinity;
         GameObject closestEnemy = null;
@@ -60,7 +68,6 @@ public class HomingBullet : MonoBehaviour
         }
     }
 
-    // ?? รองรับทั้ง Trigger และ Collision
     void OnTriggerEnter2D(Collider2D col)
     {
         HitEnemy(col.gameObject);
